@@ -1,6 +1,13 @@
-# MCP File Server
+# MCP File Manager
 
-A local file management MCP server built with Python and the official `mcp` library.
+A local file management MCP server built with Python and the official `mcp` library (FastMCP).
+
+## Features
+
+- **List Files**: List contents of directories.
+- **Read Files**: Read content of text files.
+- **File Info**: Get metadata (size, modification time) of files.
+- **Search**: Recursively search for files by name.
 
 ## Dependencies
 
@@ -14,20 +21,17 @@ A local file management MCP server built with Python and the official `mcp` libr
     uv sync
     ```
 
-2.  **Create workspace directory**:
-    The server restricts file operations to a `./workspace` directory in the project root.
-    ```bash
-    mkdir -p workspace
-    ```
-
-3.  **Run the server**:
+2.  **Run the server**:
     ```bash
     uv run main.py
     ```
 
 ## Claude Desktop Configuration
 
-Add the following to your Claude Desktop config file (usually `~/Library/Application Support/Claude/claude_desktop_config.json` on macOS or `%APPDATA%\Claude\claude_desktop_config.json` on Windows):
+Add the following to your Claude Desktop config file:
+
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
 
 ```json
 {
@@ -39,17 +43,17 @@ Add the following to your Claude Desktop config file (usually `~/Library/Applica
         "/ABSOLUTE/PATH/TO/MCP-file-managment",
         "run",
         "main.py"
-      ],
-       "env": {}
+      ]
     }
   }
 }
 ```
-**Note**: Replace `/ABSOLUTE/PATH/TO/MCP-file-managment` with the actual absolute path to this directory.
+
+**Note**: Replace `/ABSOLUTE/PATH/TO/MCP-file-managment` with the actual absolute path to the directory where you cloned this repository.
 
 ## Available Tools
 
-- `list_files(directory)`: List files and directories in the workspace.
+- `list_files(directory)`: List files and directories in the specified path (defaults to current directory).
 - `read_file(file_path)`: Read the content of a text file.
 - `file_info(file_path)`: Get file size, type, and modification time.
-- `search_files(keyword)`: Search for filenames containing a keyword.
+- `search_files(keyword)`: Recursively search for filenames containing a keyword in the current working directory.

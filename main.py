@@ -9,8 +9,7 @@ mcp = FastMCP("mcp-file-server")
 
 # Constants
 # Constants
-BASE_DIR = Path("/").resolve()
-
+BASE_DIR = Path("/home")
 def get_safe_path(path: str) -> Path:
     """
     Resolves a path to an absolute path.
