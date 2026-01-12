@@ -8,24 +8,15 @@ from typing import List, Dict
 mcp = FastMCP("mcp-file-server")
 
 # Constants
-BASE_DIR = Path("./workspace").resolve()
+# Constants
+BASE_DIR = Path("/").resolve()
 
 def get_safe_path(path: str) -> Path:
     """
-    Resolves a path and ensures it is within the base directory.
-    Raises ValueError if the path is unsafe.
+    Resolves a path to an absolute path.
     """
-    # Allow absolute paths if they are within BASE_DIR, otherwise join with BASE_DIR
-    target_path = Path(path)
-    if not target_path.is_absolute():
-        target_path = (BASE_DIR / path).resolve()
-    else:
-        target_path = target_path.resolve()
-
-    if not str(target_path).startswith(str(BASE_DIR)):
-        raise ValueError(f"Access denied: Path '{path}' is outside the base directory.")
-    
-    return target_path
+    # Resolve the path against the current working directory
+    return Path(path).resolve()
 
 @mcp.tool()
 async def list_files(directory: str = ".") -> List[str]:
@@ -101,16 +92,18 @@ async def file_info(file_path: str) -> str:
 async def search_files(keyword: str) -> List[str]:
     """
     Recursively search for files whose names contain the keyword.
+    Searches from the current working directory.
     
     Args:
         keyword: String to search for in filenames.
     """
     try:
         matches = []
-        for item in BASE_DIR.rglob("*"):
+        # Search from current working directory to avoid scanning the entire drive
+        search_base = Path(".").resolve()
+        for item in search_base.rglob("*"):
             if keyword.lower() in item.name.lower():
-                # Return path relative to BASE_DIR for cleaner output
-                matches.append(str(item.relative_to(BASE_DIR)))
+                matches.append(str(item))
         return matches if matches else ["No matches found."]
     except Exception as e:
         return [f"Error searching files: {str(e)}"]
